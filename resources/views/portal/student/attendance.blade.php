@@ -1,0 +1,85 @@
+@extends('portal.layouts.app')
+
+@section('title', 'My Attendance')
+@section('page-title', 'Attendance Record')
+
+@section('nav-links')
+    @php $slug = request()->route('school_slug'); @endphp
+    <li class="nav-item"><a class="nav-link" href="{{ route('portal.student.dashboard', $slug) }}"><i class="bi bi-house me-1"></i>Dashboard</a></li>
+    <li class="nav-item"><a class="nav-link" href="{{ route('portal.student.timetable', $slug) }}"><i class="bi bi-calendar3 me-1"></i>Timetable</a></li>
+    <li class="nav-item"><a class="nav-link" href="{{ route('portal.student.results', $slug) }}"><i class="bi bi-graph-up me-1"></i>Results</a></li>
+    <li class="nav-item"><a class="nav-link active" href="{{ route('portal.student.attendance', $slug) }}"><i class="bi bi-calendar-check me-1"></i>Attendance</a></li>
+    <li class="nav-item"><a class="nav-link" href="{{ route('portal.student.library', $slug) }}"><i class="bi bi-book me-1"></i>Library</a></li>
+@endsection
+
+@section('content')
+<div class="row g-3 mb-4">
+    <div class="col-6 col-sm-3">
+        <div class="card stat-card shadow-sm text-center">
+            <div class="card-body py-3">
+                <div class="fw-bold fs-4 text-success">{{ $summary['present'] }}</div>
+                <div class="small text-muted">Present</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-sm-3">
+        <div class="card stat-card shadow-sm text-center">
+            <div class="card-body py-3">
+                <div class="fw-bold fs-4 text-danger">{{ $summary['absent'] }}</div>
+                <div class="small text-muted">Absent</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-sm-3">
+        <div class="card stat-card shadow-sm text-center">
+            <div class="card-body py-3">
+                <div class="fw-bold fs-4 text-warning">{{ $summary['late'] }}</div>
+                <div class="small text-muted">Late</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-sm-3">
+        <div class="card stat-card shadow-sm text-center">
+            <div class="card-body py-3">
+                <div class="fw-bold fs-4 {{ $summary['rate'] >= 75 ? 'text-success' : 'text-danger' }}">
+                    {{ $summary['rate'] }}%
+                </div>
+                <div class="small text-muted">Overall Rate</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-header fw-semibold bg-white">Attendance History</div>
+    @if ($attendance->isEmpty())
+        <div class="card-body text-muted text-center py-5">No records found.</div>
+    @else
+        <div class="table-responsive">
+            <table class="table table-sm table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Date</th>
+                        <th>Day</th>
+                        <th>Status</th>
+                        <th>Remarks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($attendance as $record)
+                        <tr>
+                            <td>{{ $record->attendance_date?->format('d M Y') }}</td>
+                            <td class="text-muted small">{{ $record->attendance_date?->format('l') }}</td>
+                            <td>
+                                <span class="badge badge-{{ $record->status }}">{{ ucfirst($record->status) }}</span>
+                            </td>
+                            <td class="text-muted small">{{ $record->remarks ?? '—' }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer bg-white">{{ $attendance->links() }}</div>
+    @endif
+</div>
+@endsection
