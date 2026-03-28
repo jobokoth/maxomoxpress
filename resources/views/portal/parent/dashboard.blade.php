@@ -14,6 +14,30 @@
             <i class="bi bi-house me-1"></i>Dashboard
         </a>
     </li>
+    @foreach ($children as $child)
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-person me-1"></i>{{ $child->first_name }}
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                    <a class="dropdown-item" href="{{ route('portal.parent.fees', [$slug, $child]) }}">
+                        <i class="bi bi-cash me-2"></i>Fees
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="{{ route('portal.parent.attendance', [$slug, $child]) }}">
+                        <i class="bi bi-calendar-check me-2"></i>Attendance
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="{{ route('portal.parent.results', [$slug, $child]) }}">
+                        <i class="bi bi-graph-up me-2"></i>Results
+                    </a>
+                </li>
+            </ul>
+        </li>
+    @endforeach
     <li class="nav-item">
         <a class="nav-link" href="{{ route('portal.parent.announcements', $slug) }}">
             <i class="bi bi-megaphone me-1"></i>Announcements
@@ -113,6 +137,26 @@
                                class="btn btn-sm btn-outline-secondary flex-fill">
                                 <i class="bi bi-graph-up me-1"></i>Results
                             </a>
+                        </div>
+                        {{-- Student portal access toggle --}}
+                        <div class="mt-2 pt-2 border-top d-flex align-items-center justify-content-between">
+                            <span class="small text-muted">Student portal:</span>
+                            @if ($child->portal_access_granted)
+                                <form method="POST" action="{{ route('portal.parent.student.revoke-access', [$slug, $child]) }}">
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm btn-outline-danger"
+                                            onclick="return confirm('Revoke portal access for {{ $child->first_name }}?')">
+                                        <i class="bi bi-lock me-1"></i>Revoke Access
+                                    </button>
+                                </form>
+                            @else
+                                <form method="POST" action="{{ route('portal.parent.student.grant-access', [$slug, $child]) }}">
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm btn-outline-success">
+                                        <i class="bi bi-unlock me-1"></i>Grant Access
+                                    </button>
+                                </form>
+                            @endif
                         </div>
                     </div>
                 @empty

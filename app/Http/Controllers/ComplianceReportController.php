@@ -262,6 +262,8 @@ class ComplianceReportController extends Controller
 
     private function feeReport(array $filters): array
     {
+        $currency = app('current_school')->currency ?? 'KES';
+
         $assignments = FeeAssignment::query()
             ->with(['student.course', 'student.batch'])
             ->whereBetween('created_at', [
@@ -279,7 +281,7 @@ class ComplianceReportController extends Controller
             ->get()
             ->groupBy('student_id');
 
-        $rows = $assignments->map(function (Collection $items): array {
+        $rows = $assignments->map(function (Collection $items) use ($currency): array {
             $student = $items->first()?->student;
             $invoiced = (float) $items->sum('final_amount');
             $paid = (float) $items->sum('paid_amount');
@@ -292,9 +294,9 @@ class ComplianceReportController extends Controller
                 $student?->course?->name ?: '-',
                 $student?->batch?->name ?: '-',
                 $items->count(),
-                number_format($invoiced, 2),
-                number_format($paid, 2),
-                number_format($balance, 2),
+                $currency . ' ' . number_format($invoiced, 2),
+                $currency . ' ' . number_format($paid, 2),
+                $currency . ' ' . number_format($balance, 2),
                 $overdue,
             ];
         })->values();
@@ -309,9 +311,9 @@ class ComplianceReportController extends Controller
             'summary' => [
                 'Students Billed' => $rows->count(),
                 'Invoices' => $flat->count(),
-                'Total Invoiced' => number_format((float) $flat->sum('final_amount'), 2),
-                'Total Collected' => number_format((float) $flat->sum('paid_amount'), 2),
-                'Total Balance' => number_format((float) $flat->sum('balance_amount'), 2),
+                'Total Invoiced' => $currency . ' ' . number_format((float) $flat->sum('final_amount'), 2),
+                'Total Collected' => $currency . ' ' . number_format((float) $flat->sum('paid_amount'), 2),
+                'Total Balance' => $currency . ' ' . number_format((float) $flat->sum('balance_amount'), 2),
             ],
         ];
     }

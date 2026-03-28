@@ -10,7 +10,10 @@
                     <form method="POST" action="{{ route('tenant.operations.announcements.store', ['school_slug' => $school->slug]) }}">
                         @csrf
                         @include('operations.announcements.partials.form', ['announcement' => null])
-                        <button class="btn btn-primary w-100" type="submit">Publish</button>
+                        <button class="btn btn-primary w-100" type="submit"
+                                onclick="this.disabled=true; this.innerText='Publishing…'; this.form.submit();">
+                            Publish
+                        </button>
                     </form>
                 </div>
             </div>

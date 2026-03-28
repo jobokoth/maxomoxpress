@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>School Setup | MasomoPlus School ERP</title>
+    <title>School Setup | MasomoXpress School ERP</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -79,7 +79,7 @@
 
                 {{-- Header --}}
                 <div class="text-center mb-4">
-                    <h2 class="fw-bold mb-1">Welcome to MasomoPlus School ERP</h2>
+                    <h2 class="fw-bold mb-1">Welcome to MasomoXpress School ERP</h2>
                     <p class="text-muted">Let's set up <strong>{{ $school->name ?: 'your school' }}</strong> in a few quick steps.</p>
                 </div>
 
@@ -155,46 +155,38 @@
                                         <label class="form-label fw-semibold">School Name <span class="text-danger">*</span></label>
                                         <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
                                                value="{{ old('name', $school->name) }}"
+                                               placeholder="e.g. Greenwood Academy"
                                                id="schoolName" required>
                                         @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                                    </div>
-
-                                    <div class="col-12">
-                                        <label class="form-label fw-semibold">School URL Slug <span class="text-danger">*</span></label>
-                                        <div class="input-group">
-                                            <span class="input-group-text text-muted small">masomo.app/s/</span>
-                                            <input type="text" name="slug" id="schoolSlug"
-                                                   class="form-control @error('slug') is-invalid @enderror"
-                                                   value="{{ old('slug', $school->slug) }}"
-                                                   pattern="[a-z0-9\-]+" required>
-                                        </div>
-                                        <div class="form-text">Lowercase letters, numbers, and hyphens only.</div>
-                                        @error('slug')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                                     </div>
 
                                     <div class="col-md-6">
                                         <label class="form-label">Email</label>
                                         <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
-                                               value="{{ old('email', $school->email) }}">
+                                               value="{{ old('email', $school->email) }}"
+                                               placeholder="e.g. info@greenwoodacademy.ac.ke">
                                         @error('email')<div class="invalid-feedback">{{ $message }}</div>@enderror
                                     </div>
 
                                     <div class="col-md-6">
                                         <label class="form-label">Phone</label>
                                         <input type="tel" name="phone" class="form-control"
-                                               value="{{ old('phone', $school->phone) }}">
+                                               value="{{ old('phone', $school->phone) }}"
+                                               placeholder="e.g. +254712345678">
                                     </div>
 
                                     <div class="col-12">
                                         <label class="form-label">Address</label>
                                         <input type="text" name="address" class="form-control"
-                                               value="{{ old('address', $school->address) }}">
+                                               value="{{ old('address', $school->address) }}"
+                                               placeholder="e.g. Along Thika Road, Eastleigh">
                                     </div>
 
                                     <div class="col-md-6">
                                         <label class="form-label">City</label>
                                         <input type="text" name="city" class="form-control"
-                                               value="{{ old('city', $school->city) }}">
+                                               value="{{ old('city', $school->city) }}"
+                                               placeholder="e.g. Nairobi">
                                     </div>
 
                                     <div class="col-md-6">
@@ -205,14 +197,28 @@
 
                                     <div class="col-md-6">
                                         <label class="form-label">Timezone</label>
-                                        <input type="text" name="timezone" class="form-control"
-                                               value="{{ old('timezone', $school->timezone ?? 'Africa/Nairobi') }}">
+                                        <select name="timezone" class="form-select">
+                                            @php
+                                                $tzOptions = ['Africa/Nairobi','Africa/Kampala','Africa/Dar_es_Salaam','Africa/Kigali','Africa/Lagos','Africa/Accra','Africa/Cairo','Europe/London','Asia/Dubai','America/New_York'];
+                                                $selectedTz = old('timezone', $school->timezone ?? 'Africa/Nairobi');
+                                            @endphp
+                                            @foreach($tzOptions as $tz)
+                                                <option value="{{ $tz }}" {{ $selectedTz === $tz ? 'selected' : '' }}>{{ $tz }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
 
                                     <div class="col-md-6">
                                         <label class="form-label">Currency</label>
-                                        <input type="text" name="currency" class="form-control" maxlength="12"
-                                               value="{{ old('currency', $school->currency ?? 'KES') }}">
+                                        <select name="currency" class="form-select">
+                                            @php
+                                                $currencies = ['KES' => 'KES — Kenyan Shilling', 'UGX' => 'UGX — Ugandan Shilling', 'TZS' => 'TZS — Tanzanian Shilling', 'RWF' => 'RWF — Rwandan Franc', 'NGN' => 'NGN — Nigerian Naira', 'GHS' => 'GHS — Ghanaian Cedi', 'USD' => 'USD — US Dollar', 'GBP' => 'GBP — British Pound'];
+                                                $selectedCurrency = old('currency', $school->currency ?? 'KES');
+                                            @endphp
+                                            @foreach($currencies as $code => $label)
+                                                <option value="{{ $code }}" {{ $selectedCurrency === $code ? 'selected' : '' }}>{{ $label }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
 
                                     <div class="col-12">
@@ -241,10 +247,18 @@
 
                                 <div class="row g-3">
                                     <div class="col-12">
-                                        <label class="form-label fw-semibold">Academic Year Name <span class="text-danger">*</span></label>
-                                        <input type="text" name="academic_year_name" class="form-control @error('academic_year_name') is-invalid @enderror"
-                                               placeholder="e.g. 2025/2026"
-                                               value="{{ old('academic_year_name') }}" required>
+                                        <label class="form-label fw-semibold">Academic Year <span class="text-danger">*</span></label>
+                                        @php
+                                            $currentYear = now()->year;
+                                            $selectedYear = old('academic_year_name', (string) $currentYear);
+                                        @endphp
+                                        <select name="academic_year_name" class="form-select @error('academic_year_name') is-invalid @enderror" required>
+                                            <option value="">— Select year —</option>
+                                            @for ($y = $currentYear - 1; $y <= $currentYear + 4; $y++)
+                                                <option value="{{ $y }}" {{ $selectedYear === (string) $y ? 'selected' : '' }}>{{ $y }}</option>
+                                            @endfor
+                                        </select>
+                                        <div class="form-text">e.g. 2026 for the January–December academic year</div>
                                         @error('academic_year_name')<div class="invalid-feedback">{{ $message }}</div>@enderror
                                     </div>
 
@@ -330,7 +344,8 @@
                                     <div class="col-12">
                                         <label class="form-label">Phone Number</label>
                                         <input type="tel" name="phone" class="form-control"
-                                               value="{{ old('phone', auth()->user()->phone) }}">
+                                               value="{{ old('phone', auth()->user()->phone) }}"
+                                               placeholder="e.g. +254712345678">
                                     </div>
 
                                     <div class="col-12">
@@ -366,31 +381,87 @@
                                 @csrf
                                 <input type="hidden" name="step" value="4">
 
-                                <div class="row g-3">
-                                    <div class="col-12">
-                                        <label class="form-label">Mpesa Paybill Number</label>
-                                        <input type="text" name="mpesa_paybill" class="form-control"
-                                               placeholder="e.g. 123456"
-                                               value="{{ old('mpesa_paybill', ($school->settings['payment']['mpesa_paybill'] ?? '')) }}">
-                                    </div>
+                                @php
+                                    $pmtSettings = $school->settings['payment'] ?? [];
+                                @endphp
 
-                                    <div class="col-md-6">
-                                        <label class="form-label">Bank Name</label>
-                                        <input type="text" name="bank_name" class="form-control"
-                                               value="{{ old('bank_name', ($school->settings['payment']['bank_name'] ?? '')) }}">
+                                {{-- Row 1: Mpesa Paybill --}}
+                                <div class="border rounded p-3 mb-3">
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="enableMpesa" name="enable_mpesa" value="1"
+                                               onchange="toggleSection('mpesaFields', this.checked)"
+                                               {{ old('enable_mpesa', !empty($pmtSettings['mpesa_paybill'])) ? 'checked' : '' }}>
+                                        <label class="form-check-label fw-semibold" for="enableMpesa">
+                                            <i class="bi bi-phone me-1 text-success"></i>Mpesa Paybill
+                                        </label>
                                     </div>
-
-                                    <div class="col-md-6">
-                                        <label class="form-label">Bank Account Number</label>
-                                        <input type="text" name="bank_account_number" class="form-control"
-                                               value="{{ old('bank_account_number', ($school->settings['payment']['bank_account_number'] ?? '')) }}">
+                                    <div id="mpesaFields" class="{{ old('enable_mpesa', !empty($pmtSettings['mpesa_paybill'])) ? '' : 'd-none' }} row g-2 ps-4">
+                                        <div class="col-md-6">
+                                            <label class="form-label small">Paybill Number</label>
+                                            <input type="text" name="mpesa_paybill" class="form-control"
+                                                   placeholder="e.g. 123456"
+                                                   value="{{ old('mpesa_paybill', $pmtSettings['mpesa_paybill'] ?? '') }}">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label small">Account Number Format</label>
+                                            <select name="mpesa_account_format" class="form-select">
+                                                @php $acFmt = old('mpesa_account_format', $pmtSettings['mpesa_account_format'] ?? 'admission_number'); @endphp
+                                                <option value="admission_number" {{ $acFmt === 'admission_number' ? 'selected' : '' }}>Admission Number (e.g. ADM-2025-0001)</option>
+                                                <option value="student_id" {{ $acFmt === 'student_id' ? 'selected' : '' }}>Student ID Number</option>
+                                                <option value="custom" {{ $acFmt === 'custom' ? 'selected' : '' }}>Custom (parent types their own)</option>
+                                            </select>
+                                        </div>
                                     </div>
+                                </div>
 
-                                    <div class="col-12">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="acceptCheques" name="accept_cheques" value="1"
-                                                {{ old('accept_cheques', ($school->settings['payment']['accept_cheques'] ?? false)) ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="acceptCheques">Accept Cheque Payments</label>
+                                {{-- Row 2: Bank Transfer --}}
+                                <div class="border rounded p-3 mb-3">
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="enableBank" name="enable_bank" value="1"
+                                               onchange="toggleSection('bankFields', this.checked)"
+                                               {{ old('enable_bank', !empty($pmtSettings['bank_name'])) ? 'checked' : '' }}>
+                                        <label class="form-check-label fw-semibold" for="enableBank">
+                                            <i class="bi bi-bank me-1 text-primary"></i>Bank Transfer
+                                        </label>
+                                    </div>
+                                    <div id="bankFields" class="{{ old('enable_bank', !empty($pmtSettings['bank_name'])) ? '' : 'd-none' }} row g-2 ps-4">
+                                        <div class="col-md-4">
+                                            <label class="form-label small">Bank Name</label>
+                                            <input type="text" name="bank_name" class="form-control"
+                                                   placeholder="e.g. Equity Bank"
+                                                   value="{{ old('bank_name', $pmtSettings['bank_name'] ?? '') }}">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label small">Account Number</label>
+                                            <input type="text" name="bank_account_number" class="form-control"
+                                                   placeholder="e.g. 0123456789"
+                                                   value="{{ old('bank_account_number', $pmtSettings['bank_account_number'] ?? '') }}">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label small">Branch</label>
+                                            <input type="text" name="bank_branch" class="form-control"
+                                                   placeholder="e.g. Westlands Branch"
+                                                   value="{{ old('bank_branch', $pmtSettings['bank_branch'] ?? '') }}">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- Row 3: Cheque --}}
+                                <div class="border rounded p-3 mb-3">
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="enableCheque" name="enable_cheque" value="1"
+                                               onchange="toggleSection('chequeFields', this.checked)"
+                                               {{ old('enable_cheque', !empty($pmtSettings['cheque_payable_to'])) ? 'checked' : '' }}>
+                                        <label class="form-check-label fw-semibold" for="enableCheque">
+                                            <i class="bi bi-journal-check me-1 text-secondary"></i>Cheque
+                                        </label>
+                                    </div>
+                                    <div id="chequeFields" class="{{ old('enable_cheque', !empty($pmtSettings['cheque_payable_to'])) ? '' : 'd-none' }} row g-2 ps-4">
+                                        <div class="col-12">
+                                            <label class="form-label small">Cheque Made Payable To</label>
+                                            <input type="text" name="cheque_payable_to" class="form-control"
+                                                   placeholder="e.g. Greenwood Academy"
+                                                   value="{{ old('cheque_payable_to', $pmtSettings['cheque_payable_to'] ?? $school->name) }}">
                                         </div>
                                     </div>
                                 </div>
@@ -467,24 +538,10 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Auto-generate slug from school name on step 1
-        const nameInput  = document.getElementById('schoolName');
-        const slugInput  = document.getElementById('schoolSlug');
-
-        if (nameInput && slugInput) {
-            let slugManuallyEdited = slugInput.value.length > 0;
-
-            slugInput.addEventListener('input', () => { slugManuallyEdited = true; });
-
-            nameInput.addEventListener('input', () => {
-                if (slugManuallyEdited) return;
-                slugInput.value = nameInput.value
-                    .toLowerCase()
-                    .trim()
-                    .replace(/[^a-z0-9\s-]/g, '')
-                    .replace(/\s+/g, '-')
-                    .replace(/-+/g, '-');
-            });
+        // Toggle payment method sub-fields
+        function toggleSection(id, show) {
+            const el = document.getElementById(id);
+            if (el) el.classList.toggle('d-none', !show);
         }
 
         // Dynamically render term blocks based on term count selector

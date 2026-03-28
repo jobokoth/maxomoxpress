@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>Register Your School | MasomoPlus School ERP</title>
+    <title>Register Your School | MasomoXpress School ERP</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -28,7 +28,7 @@
                              style="width:56px;height:56px;">
                             <i class="bi bi-mortarboard-fill text-white fs-3"></i>
                         </div>
-                        <h1 class="fw-bold mb-1">MasomoPlus School ERP</h1>
+                        <h1 class="fw-bold mb-1">MasomoXpress School ERP</h1>
                         <p class="text-muted">Get started in minutes. Free {{ config('app.trial_days', 30) }}-day trial, no credit card required.</p>
                     </div>
 

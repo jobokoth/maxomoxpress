@@ -74,8 +74,10 @@ class LoginController extends Controller
             return route('login');
         }
 
-        if ($user?->can('parent-portal.view')) {
-            return route('tenant.parent-portal.index', ['school_slug' => $school->slug]);
+        // Parents (users with no admin/staff/teacher role) go to the parent-facing portal
+        $adminRoles = ['super-admin', 'admin', 'school_admin', 'staff', 'teacher'];
+        if ($user?->hasRole('parent') && ! $user->hasRole($adminRoles)) {
+            return route('portal.parent.dashboard', ['school_slug' => $school->slug]);
         }
 
         return route('tenant.dashboard', ['school_slug' => $school->slug]);

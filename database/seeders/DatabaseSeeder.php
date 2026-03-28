@@ -50,6 +50,7 @@ class DatabaseSeeder extends Seeder
             'batches.manage',
             'subjects.view',
             'subjects.manage',
+            'teachers.manage',
             'teacher-assignments.manage',
             'attendance.manage',
             'timetable.manage',

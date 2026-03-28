@@ -74,7 +74,8 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(School::class)
             ->withPivot(['role_in_school', 'is_primary_school', 'joined_at', 'left_at'])
-            ->withTimestamps();
+            ->withTimestamps()
+            ->withCasts(['joined_at' => 'datetime', 'left_at' => 'datetime']);
     }
 
     public function subjectAssignments(): HasMany

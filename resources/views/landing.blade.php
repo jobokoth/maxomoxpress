@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="MasomoPlus — The all-in-one school management system built for Kenyan schools. Mpesa payments, parent portal, attendance, fees and more. Start your free trial today.">
-    <title>MasomoPlus | School Management System for Kenyan Schools</title>
+    <meta name="description" content="MasomoXpress — The all-in-one school management system built for Kenyan schools. Mpesa payments, parent portal, attendance, fees and more. Start your free trial today.">
+    <title>MasomoXpress | School Management System for Kenyan Schools</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -167,7 +167,7 @@
 <nav class="navbar navbar-expand-lg bg-white sticky-top border-bottom shadow-sm" style="z-index:1030;">
     <div class="container">
         <a class="navbar-brand" href="{{ route('landing') }}">
-            Masomo<span>Plus</span>
+            Masomo<span>Xpress</span>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
             <span class="navbar-toggler-icon"></span>
@@ -234,7 +234,7 @@
                         <div style="width:10px;height:10px;border-radius:50%;background:#ef4444;"></div>
                         <div style="width:10px;height:10px;border-radius:50%;background:#f59e0b;"></div>
                         <div style="width:10px;height:10px;border-radius:50%;background:#10b981;"></div>
-                        <span class="text-white opacity-50 small ms-2">MasomoPlus Dashboard</span>
+                        <span class="text-white opacity-50 small ms-2">MasomoXpress Dashboard</span>
                     </div>
                     <div class="row g-2 mb-3">
                         @foreach([['bi-people-fill','Students','324','#4F46E5'],['bi-currency-exchange','Fees Collected','KES 1.2M','#10b981'],['bi-calendar-check','Attendance','96.4%','#06B6D4'],['bi-bell-fill','Alerts','3','#f59e0b']] as [$icon, $label, $val, $color])
@@ -289,7 +289,7 @@
             <span class="section-label">Everything you need</span>
             <h2 class="section-title">Built for how Kenyan schools actually work</h2>
             <p class="section-sub mx-auto mt-2">
-                No generic one-size-fits-all software. MasomoPlus is designed around the workflows,
+                No generic one-size-fits-all software. MasomoXpress is designed around the workflows,
                 payment methods, and reporting needs of schools in Kenya.
             </p>
         </div>
@@ -487,12 +487,12 @@
                 <div class="accordion" id="faqAccordion">
                     @php
                     $faqs = [
-                        ['Do I need technical knowledge to set up MasomoPlus?','No. The onboarding wizard guides you through every step — school details, classes, fee structures, and payment setup. Most schools are fully configured within 2 hours.'],
-                        ['How does the Mpesa integration work?','You can use your school\'s own Paybill (own Daraja account), your bank-issued Mpesa shortcode, or share the MasomoPlus platform account. We auto-register the confirmation webhook with Safaricom so payments reflect in the system instantly.'],
+                        ['Do I need technical knowledge to set up MasomoXpress?','No. The onboarding wizard guides you through every step — school details, classes, fee structures, and payment setup. Most schools are fully configured within 2 hours.'],
+                        ['How does the Mpesa integration work?','You can use your school\'s own Paybill (own Daraja account), your bank-issued Mpesa shortcode, or share the MasomoXpress platform account. We auto-register the confirmation webhook with Safaricom so payments reflect in the system instantly.'],
                         ['Can parents access the portal without an app?','Yes. The parent portal is a web application that works on any smartphone browser — no app download needed. Parents log in at your school\'s portal URL.'],
                         ['What happens after the free trial?','After your 1-month trial you\'ll be asked to subscribe. Your data is never deleted — you have 14 days after trial expiry to subscribe before the account is suspended.'],
                         ['Is our school\'s data kept private?','Yes. Each school\'s data is completely isolated — no other school can see your students, fees, or any records. We use encrypted connections and regular backups.'],
-                        ['Can we import our existing student data?','Yes. MasomoPlus supports bulk CSV import for students, guardians, and fee records. Our onboarding team can assist with large imports.'],
+                        ['Can we import our existing student data?','Yes. MasomoXpress supports bulk CSV import for students, guardians, and fee records. Our onboarding team can assist with large imports.'],
                         ['Do you offer support in Kiswahili?','Our support team is Kenyan and can assist in both English and Kiswahili. Support is available Monday–Saturday 8am–6pm EAT.'],
                     ];
                     @endphp
@@ -526,7 +526,7 @@
                 Ready to modernise your school?
             </h2>
             <p class="mb-4 opacity-75" style="font-size:1.1rem;max-width:520px;margin:0 auto 1.5rem;">
-                Join hundreds of Kenyan schools managing students, fees, and parents smarter with MasomoPlus.
+                Join hundreds of Kenyan schools managing students, fees, and parents smarter with MasomoXpress.
                 Your first month is completely free.
             </p>
             <div class="d-flex flex-wrap gap-3 justify-content-center">
@@ -543,7 +543,7 @@
     <div class="container">
         <div class="row g-4 mb-5">
             <div class="col-lg-4">
-                <div class="footer-brand mb-2">Masomo<span>Plus</span></div>
+                <div class="footer-brand mb-2">Masomo<span>Xpress</span></div>
                 <p style="font-size:.92rem;max-width:280px;">
                     The all-in-one school management system built for Kenyan schools.
                 </p>
@@ -594,7 +594,7 @@
 
         <div class="border-top pt-4 d-flex flex-wrap justify-content-between align-items-center gap-2" style="border-color:#1f2937 !important;">
             <p class="mb-0 small">
-                &copy; {{ date('Y') }} MasomoPlus. All rights reserved. Built with ❤️ in Kenya.
+                &copy; {{ date('Y') }} MasomoXpress. All rights reserved. Built with ❤️ in Kenya.
             </p>
             <div class="d-flex align-items-center gap-2 small">
                 <span>Payments secured by</span>

@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class SchoolSetupWizardController extends Controller
@@ -71,13 +72,6 @@ class SchoolSetupWizardController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
-            'slug' => [
-                'required',
-                'string',
-                'max:255',
-                'regex:/^[a-z0-9\-]+$/',
-                'unique:schools,slug,'.$school->id,
-            ],
             'email' => 'nullable|email|max:255',
             'phone' => 'nullable|string|max:50',
             'address' => 'nullable|string|max:500',
@@ -88,9 +82,28 @@ class SchoolSetupWizardController extends Controller
             'website' => 'nullable|url|max:255',
         ]);
 
+        // Auto-generate a unique slug from the school name if not already set
+        if (blank($school->slug)) {
+            $data['slug'] = $this->generateUniqueSlug($data['name'], $school->id);
+        }
+
         $school->update(array_merge($data, ['onboarding_step' => 1]));
 
         return redirect()->route('onboarding')->with('success', 'School information saved.');
+    }
+
+    private function generateUniqueSlug(string $name, int $excludeId): string
+    {
+        $base = Str::slug($name);
+        $slug = $base;
+        $counter = 2;
+
+        while (School::where('slug', $slug)->where('id', '!=', $excludeId)->exists()) {
+            $slug = $base . '-' . $counter;
+            $counter++;
+        }
+
+        return $slug;
     }
 
     /**
@@ -199,18 +212,25 @@ class SchoolSetupWizardController extends Controller
         }
 
         $data = $request->validate([
+            'enable_mpesa' => 'nullable|boolean',
             'mpesa_paybill' => 'nullable|string|max:20',
+            'mpesa_account_format' => 'nullable|string|in:admission_number,student_id,custom',
+            'enable_bank' => 'nullable|boolean',
             'bank_name' => 'nullable|string|max:100',
             'bank_account_number' => 'nullable|string|max:50',
-            'accept_cheques' => 'nullable|boolean',
+            'bank_branch' => 'nullable|string|max:100',
+            'enable_cheque' => 'nullable|boolean',
+            'cheque_payable_to' => 'nullable|string|max:255',
         ]);
 
         $settings = $school->settings ?? [];
         $settings['payment'] = [
-            'mpesa_paybill' => $data['mpesa_paybill'] ?? null,
-            'bank_name' => $data['bank_name'] ?? null,
-            'bank_account_number' => $data['bank_account_number'] ?? null,
-            'accept_cheques' => $request->boolean('accept_cheques'),
+            'mpesa_paybill' => $request->boolean('enable_mpesa') ? ($data['mpesa_paybill'] ?? null) : null,
+            'mpesa_account_format' => $request->boolean('enable_mpesa') ? ($data['mpesa_account_format'] ?? 'admission_number') : null,
+            'bank_name' => $request->boolean('enable_bank') ? ($data['bank_name'] ?? null) : null,
+            'bank_account_number' => $request->boolean('enable_bank') ? ($data['bank_account_number'] ?? null) : null,
+            'bank_branch' => $request->boolean('enable_bank') ? ($data['bank_branch'] ?? null) : null,
+            'cheque_payable_to' => $request->boolean('enable_cheque') ? ($data['cheque_payable_to'] ?? null) : null,
         ];
 
         $school->update([

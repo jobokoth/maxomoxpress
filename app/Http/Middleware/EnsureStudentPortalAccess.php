@@ -32,6 +32,10 @@ class EnsureStudentPortalAccess
             abort(403, 'You do not have student portal access for this school.');
         }
 
+        if (! $student->portal_access_granted) {
+            abort(403, 'Your parent has not yet granted you access to the student portal.');
+        }
+
         $request->attributes->set('portal_student', $student);
 
         return $next($request);

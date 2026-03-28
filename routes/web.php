@@ -21,6 +21,7 @@ use App\Http\Controllers\StudentServicesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\TeacherController;
 use Illuminate\Support\Facades\Route;
 
 // ─── Landing page ─────────────────────────────────────────────────────────────
@@ -94,6 +95,8 @@ Route::prefix('s/{school_slug}/portal/parent')
         Route::get('/results/{student}', [ParentPortal::class, 'results'])->name('results');
         Route::get('/announcements', [ParentPortal::class, 'announcements'])->name('announcements');
         Route::get('/events', [ParentPortal::class, 'events'])->name('events');
+        Route::post('/students/{student}/grant-access', [ParentPortal::class, 'grantStudentAccess'])->name('student.grant-access');
+        Route::post('/students/{student}/revoke-access', [ParentPortal::class, 'revokeStudentAccess'])->name('student.revoke-access');
     });
 
 // ─── Student Portal ───────────────────────────────────────────────────────────
@@ -262,6 +265,16 @@ Route::prefix('s/{school_slug}')
 
         Route::middleware('permission:parent-portal.view')->group(function (): void {
             Route::get('/parent-portal', [ParentPortalController::class, 'index'])->name('tenant.parent-portal.index');
+        });
+
+        Route::middleware('permission:teachers.manage')->group(function (): void {
+            Route::get('/teachers', [TeacherController::class, 'index'])->name('tenant.teachers.index');
+            Route::get('/teachers/create', [TeacherController::class, 'create'])->name('tenant.teachers.create');
+            Route::post('/teachers', [TeacherController::class, 'store'])->name('tenant.teachers.store');
+            Route::get('/teachers/{teacher}', [TeacherController::class, 'show'])->whereNumber('teacher')->name('tenant.teachers.show');
+            Route::get('/teachers/{teacher}/edit', [TeacherController::class, 'edit'])->whereNumber('teacher')->name('tenant.teachers.edit');
+            Route::put('/teachers/{teacher}', [TeacherController::class, 'update'])->whereNumber('teacher')->name('tenant.teachers.update');
+            Route::delete('/teachers/{teacher}', [TeacherController::class, 'destroy'])->whereNumber('teacher')->name('tenant.teachers.destroy');
         });
 
         Route::middleware('permission:students.view')->group(function (): void {

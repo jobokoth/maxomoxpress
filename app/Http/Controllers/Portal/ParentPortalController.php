@@ -172,4 +172,42 @@ class ParentPortalController extends Controller
 
         return view('portal.parent.events', compact('school', 'guardian', 'events'));
     }
+
+    public function grantStudentAccess(Request $request, Student $student): \Illuminate\Http\RedirectResponse
+    {
+        $school = app('current_school');
+        $guardian = $this->guardian($request);
+
+        abort_unless(
+            $guardian->students->contains($student->id),
+            403,
+            'This student is not linked to your account.'
+        );
+
+        Student::withoutGlobalScopes()
+            ->where('id', $student->id)
+            ->where('school_id', $school->id)
+            ->update(['portal_access_granted' => true]);
+
+        return back()->with('success', $student->first_name . ' has been granted access to the student portal.');
+    }
+
+    public function revokeStudentAccess(Request $request, Student $student): \Illuminate\Http\RedirectResponse
+    {
+        $school = app('current_school');
+        $guardian = $this->guardian($request);
+
+        abort_unless(
+            $guardian->students->contains($student->id),
+            403,
+            'This student is not linked to your account.'
+        );
+
+        Student::withoutGlobalScopes()
+            ->where('id', $student->id)
+            ->where('school_id', $school->id)
+            ->update(['portal_access_granted' => false]);
+
+        return back()->with('success', $student->first_name . '\'s student portal access has been revoked.');
+    }
 }

@@ -56,6 +56,7 @@ class Student extends Model
         'previous_school_notes',
         'meta',
         'user_id',
+        'portal_access_granted',
         'qb_customer_id',
     ];
 
@@ -72,6 +73,7 @@ class Student extends Model
             'exited_at' => 'date',
             'clearance_completed_at' => 'datetime',
             'meta' => 'array',
+            'portal_access_granted' => 'boolean',
         ];
     }
 

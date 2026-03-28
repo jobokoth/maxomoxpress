@@ -4,8 +4,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="author" content="Masomo School ERP" />
-    <title>{{ $title ?? 'Masomo School ERP' }}</title>
+    <meta name="author" content="MasomoXpress School ERP" />
+    <title>{{ $title ?? 'MasomoXpress School ERP' }}</title>
 
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('dashui/assets/images/favicon/favicon.ico') }}" />
     <script src="{{ asset('dashui/assets/js/vendors/color-modes.js') }}"></script>
@@ -20,8 +20,10 @@
     <main id="main-wrapper" class="main-wrapper">
         <nav class="navbar-vertical navbar">
             <div class="nav-scroller">
-                <a class="navbar-brand" href="{{ route('tenant.dashboard', ['school_slug' => $school->slug]) }}">
-                    <img src="{{ asset('dashui/assets/images/brand/logo/logo-2.svg') }}" alt="logo" />
+                <a class="navbar-brand d-flex align-items-center gap-2" href="{{ route('tenant.dashboard', ['school_slug' => $school->slug]) }}"
+                   style="font-weight:700;font-size:1.1rem;color:#4f46e5;letter-spacing:-.01em;text-decoration:none;">
+                    <i class="bi bi-mortarboard-fill" style="font-size:1.3rem;"></i>
+                    Masomo<span style="color:#06b6d4;">Xpress</span>
                 </a>
 
                 <ul class="navbar-nav flex-column" id="sideNavbar">
@@ -31,10 +33,12 @@
                         </a>
                     </li>
 
-                    @can('students.view')
+                    @if (auth()->user()->can('students.view') || auth()->user()->can('teachers.manage'))
                         <li class="nav-item">
-                            <span class="navbar-heading">Students</span>
+                            <span class="navbar-heading">People</span>
                         </li>
+                    @endif
+                    @can('students.view')
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('tenant.students.*') && ! request()->routeIs('tenant.students.alumni') ? 'active' : '' }}" href="{{ route('tenant.students.index', ['school_slug' => $school->slug]) }}">
                                 <i data-feather="user-check" class="nav-icon icon-xs me-2"></i> Admissions
@@ -43,6 +47,13 @@
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('tenant.students.alumni') ? 'active' : '' }}" href="{{ route('tenant.students.alumni', ['school_slug' => $school->slug]) }}">
                                 <i data-feather="award" class="nav-icon icon-xs me-2"></i> Alumni
+                            </a>
+                        </li>
+                    @endcan
+                    @can('teachers.manage')
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('tenant.teachers.*') ? 'active' : '' }}" href="{{ route('tenant.teachers.index', ['school_slug' => $school->slug]) }}">
+                                <i data-feather="user" class="nav-icon icon-xs me-2"></i> Teachers
                             </a>
                         </li>
                     @endcan
